@@ -1,0 +1,40 @@
+﻿  Shader.cpp
+c:\users\matrix\documents\visual studio 2010\projects\openglanimation\openglanimation\mathutils.h(58): warning C4244: '=': conversion from 'double' to 'float', possible loss of data
+c:\users\matrix\documents\visual studio 2010\projects\openglanimation\openglanimation\mathutils.h(61): warning C4244: '=': conversion from 'double' to 'float', possible loss of data
+c:\users\matrix\documents\visual studio 2010\projects\openglanimation\openglanimation\mathutils.h(64): warning C4244: '=': conversion from 'double' to 'float', possible loss of data
+c:\users\matrix\documents\visual studio 2010\projects\openglanimation\openglanimation\mathutils.h(77): warning C4244: '=': conversion from 'double' to 'float', possible loss of data
+c:\users\matrix\documents\visual studio 2010\projects\openglanimation\openglanimation\mathutils.h(78): warning C4244: '=': conversion from 'double' to 'float', possible loss of data
+c:\users\matrix\documents\visual studio 2010\projects\openglanimation\openglanimation\mathutils.h(79): warning C4244: '=': conversion from 'double' to 'float', possible loss of data
+c:\users\matrix\documents\visual studio 2010\projects\openglanimation\openglanimation\mathutils.h(81): warning C4244: '=': conversion from 'double' to 'float', possible loss of data
+c:\users\matrix\documents\visual studio 2010\projects\openglanimation\openglanimation\mathutils.h(82): warning C4244: '=': conversion from 'double' to 'float', possible loss of data
+c:\users\matrix\documents\visual studio 2010\projects\openglanimation\openglanimation\mathutils.h(83): warning C4244: '=': conversion from 'double' to 'float', possible loss of data
+c:\users\matrix\documents\visual studio 2010\projects\openglanimation\openglanimation\mathutils.h(85): warning C4244: '=': conversion from 'double' to 'float', possible loss of data
+c:\users\matrix\documents\visual studio 2010\projects\openglanimation\openglanimation\mathutils.h(86): warning C4244: '=': conversion from 'double' to 'float', possible loss of data
+c:\users\matrix\documents\visual studio 2010\projects\openglanimation\openglanimation\mathutils.h(87): warning C4244: '=': conversion from 'double' to 'float', possible loss of data
+c:\users\matrix\documents\visual studio 2010\projects\openglanimation\openglanimation\mathutils.h(155): warning C4244: '=': conversion from 'double' to 'float', possible loss of data
+c:\users\matrix\documents\visual studio 2010\projects\openglanimation\openglanimation\mathutils.h(159): warning C4244: '=': conversion from 'double' to 'float', possible loss of data
+c:\users\matrix\documents\visual studio 2010\projects\openglanimation\openglanimation\mathutils.h(171): warning C4244: '=': conversion from 'double' to 'float', possible loss of data
+c:\users\matrix\documents\visual studio 2010\projects\openglanimation\openglanimation\mathutils.h(172): warning C4244: '=': conversion from 'double' to 'float', possible loss of data
+c:\users\matrix\documents\visual studio 2010\projects\openglanimation\openglanimation\shader.cpp(32): warning C4018: '<': signed/unsigned mismatch
+c:\users\matrix\documents\visual studio 2010\projects\openglanimation\openglanimation\shader.cpp(45): warning C4018: '<': signed/unsigned mismatch
+c:\users\matrix\documents\visual studio 2010\projects\openglanimation\openglanimation\shader.cpp(62): warning C4244: 'argument': conversion from 'float' to 'int', possible loss of data
+c:\users\matrix\documents\visual studio 2010\projects\openglanimation\openglanimation\shader.cpp(62): warning C4244: '=': conversion from 'int' to 'float', possible loss of data
+c:\users\matrix\documents\visual studio 2010\projects\openglanimation\openglanimation\shader.cpp(63): warning C4244: 'argument': conversion from 'float' to 'int', possible loss of data
+c:\users\matrix\documents\visual studio 2010\projects\openglanimation\openglanimation\shader.cpp(63): warning C4244: '=': conversion from 'int' to 'float', possible loss of data
+c:\users\matrix\documents\visual studio 2010\projects\openglanimation\openglanimation\shader.cpp(67): warning C4018: '<': signed/unsigned mismatch
+c:\users\matrix\documents\visual studio 2010\projects\openglanimation\openglanimation\shader.cpp(73): warning C4244: 'argument': conversion from 'float' to 'int', possible loss of data
+c:\users\matrix\documents\visual studio 2010\projects\openglanimation\openglanimation\shader.cpp(74): warning C4244: 'argument': conversion from 'float' to 'int', possible loss of data
+c:\users\matrix\documents\visual studio 2010\projects\openglanimation\openglanimation\shader.cpp(78): warning C4244: 'initializing': conversion from 'int' to 'float', possible loss of data
+c:\users\matrix\documents\visual studio 2010\projects\openglanimation\openglanimation\shader.cpp(79): warning C4244: 'argument': conversion from 'float' to 'int', possible loss of data
+c:\users\matrix\documents\visual studio 2010\projects\openglanimation\openglanimation\shader.cpp(79): warning C4244: 'initializing': conversion from 'int' to 'float', possible loss of data
+c:\users\matrix\documents\visual studio 2010\projects\openglanimation\openglanimation\shader.cpp(82): warning C4244: '=': conversion from 'float' to 'int', possible loss of data
+c:\users\matrix\documents\visual studio 2010\projects\openglanimation\openglanimation\shader.cpp(93): warning C4244: 'initializing': conversion from 'int' to 'float', possible loss of data
+c:\users\matrix\documents\visual studio 2010\projects\openglanimation\openglanimation\shader.cpp(94): warning C4244: 'initializing': conversion from 'int' to 'float', possible loss of data
+c:\users\matrix\documents\visual studio 2010\projects\openglanimation\openglanimation\shader.cpp(96): warning C4244: 'argument': conversion from 'int' to 'float', possible loss of data
+  SOIL.lib(SOIL.obj) : MSIL .netmodule or module compiled with /GL found; restarting link with /LTCG; add /LTCG to the link command line to improve linker performance
+LINK : warning LNK4075: ignoring '/INCREMENTAL' due to '/LTCG' specification
+Armature.obj : warning LNK4075: ignoring '/EDITANDCONTINUE' due to '/OPT:LBR' specification
+  Generating code
+  Finished generating code
+  OpenglAnimation.vcxproj -> C:\Users\Matrix\Documents\Visual Studio 2010\Projects\OpenglAnimation\Debug\OpenglAnimation.exe
+  OpenglAnimation.vcxproj -> C:\Users\Matrix\Documents\Visual Studio 2010\Projects\OpenglAnimation\Debug\OpenglAnimation.pdb (Full PDB)
