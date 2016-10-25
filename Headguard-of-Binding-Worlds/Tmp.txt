@@ -1,0 +1,32 @@
+string jointBase = string("mLocal[") + to_string((long long)i) + string("]");
+		string jointMatrix = string("mGlobal[") + to_string((long long)i) + string("]");
+
+		glm::mat3x4 matAnimate;
+			
+			float timeA = joints[i].getBoneMatrixData(prevFrame).frame;
+			float timeB = joints[i].getBoneMatrixData(end).frame;
+
+			vec3 pos = ShaderUtils::transitionToFrame(joints[i].getBoneMatrixData(prevFrame).pos, joints[i].getBoneMatrixData(nextFrame).pos, frame, prevFrame, end);
+			AnimationData dataA = joints[i].getBoneMatrixData(prevFrame);
+			AnimationData dataB = joints[i].getBoneMatrixData(nextFrame);
+			float t = (float)(frame - timeA) / (float)(timeB - timeA);
+			vec4 quat = glm::mix(dataA.rot, dataB.rot, t);
+			quat = glm::normalize(quat);
+
+			Math::QuaternionMatrix(quat, matAnimate);
+			matAnimate[0][3] = pos.x;
+			matAnimate[1][3] = pos.y;
+			matAnimate[2][3] = pos.z;
+		Math::R_ConcatTransforms(joints[i].getDefaultMatrix(), matAnimate, joints[i].matLocal);
+		// build up the hierarchy if joints
+		// matGlobal = matGlobal(parent) * matLocal
+		int parent = joints[i].getParentIndex();
+		if (parent == -1)
+		{
+			joints[i].matGlobal = joints[i].matLocal;
+		}
+		else
+		{
+			Joint *pJoint = &joints[parent];
+			Math::R_ConcatTransforms(pJoint->matGlobal, joints[i].matLocal, joints[i].matGlobal);
+		}
