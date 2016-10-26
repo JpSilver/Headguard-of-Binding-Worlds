@@ -1,25 +1,10 @@
 #include "Entity.h"
 
-Entity::Entity(){
-	shader = 0;
-	position = vec3(0);
-	rotation = vec3(0);
-	scale = vec3(1);
-	frame = 0;
-	this->modelHandler = nullptr;
-	int screen_width = 1024;
-	int screen_height = 768;
-	float zNear = 0.1F;
-	float zFar = 1000.0F;
-	float fov = 75.0f;
-	projectionMatrix = glm::perspectiveFov(fov, (float)screen_width, (float)screen_height, zNear, zFar);
-};
-
-Entity::Entity(vec3 position, Shader *shader, ModelHandler *modelHandler, Armature armature)
+Entity::Entity(vec3 position, Shader *shader, ModelHandler *modelHandler, Armature &armature)
 {
 	this->shader = shader;
 	this->position = position;
-	this->armature = armature;
+	this->armature = Armature(armature);
 	this->rotation = vec3(0);
 	this->scale = vec3(1);
 	this->modelHandler = modelHandler;
@@ -35,7 +20,6 @@ Entity::Entity(vec3 position, Shader *shader, ModelHandler *modelHandler, string
 {
 	this->shader = shader;
 	this->position = position;
-	this->armature = armature;
 	this->rotation = vec3(0);
 	this->scale = vec3(1);
 	this->modelHandler = modelHandler;
@@ -72,7 +56,7 @@ void Entity::addModel(Model model)
 	this->models.push_back(modelHandler->addModel(model));
 };
 
-void Entity::draw(Camera camera, Shader shader){
+void Entity::draw(Camera camera, Shader shader, double deltaTime){
 	vector<glm::mat3x4> animations = vector<glm::mat3x4>();
 	mat4 modelMatrix = mat4(1);
 	modelMatrix = glm::translate(modelMatrix, position);
@@ -82,7 +66,7 @@ void Entity::draw(Camera camera, Shader shader){
 	modelMatrix = glm::scale(modelMatrix, vec3(1, 1, 1));
 
 	mat4 viewMatrix = camera.getViewMatrix();
-	shader.loadUniformJoits(&armature, animations);
+	shader.loadUniformJoits(armature, animations, deltaTime);
 	// Use our shader
 	for (int i = 0; i < this->models.size(); i ++) {
 		int programID = shader.getProgramID();

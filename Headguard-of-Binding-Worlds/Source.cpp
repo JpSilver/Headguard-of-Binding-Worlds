@@ -38,8 +38,6 @@ SDL_GLContext glContext;
 
 Shader shader;
 ms3dModelLoader modelLoader;
-Entity entity1;
-Entity entity2;
 double deltaTime = 0;
 
 
@@ -179,7 +177,7 @@ int main(int argc, char *argv[])
 		}
 		//entity.setPosition(camera.getPosition());
 		//entity.setRotation(camera.getRotation());
-		entity.draw(camera, shader);
+		entity.draw(camera, shader, deltaTime);
         // Update window with OpenGL rendering
         SDL_GL_SwapWindow(window);
 		LAST = NOW;

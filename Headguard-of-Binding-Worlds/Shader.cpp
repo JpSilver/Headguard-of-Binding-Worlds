@@ -37,39 +37,59 @@ GLuint Shader::loadUniformVec3Vector(vector<vec3> values, string name){
 	return id;
 };
 
-GLuint Shader::loadUniformJoits(Armature *armature, vector<glm::mat3x4> &animations){
+GLuint Shader::loadUniformJoits(Armature &armature, vector<glm::mat3x4> &animations, double deltaTime){
 	GLuint id = 0;
-	vector<Joint> *baseJointsPtr = armature->getBaseJoints();
-	vector<Joint> baseJoints = *baseJointsPtr;
+
+	armature.addFrame(deltaTime);
+	float frame = armature.getFrame();
+	Animation prevAnimation = armature.getPrevAnimation();
+	Keyframe startKey = armature.getBaseAnimation().getKeyframeStart();
+	Keyframe blend = prevAnimation.getKeyframeStart();
+	Keyframe prevKey = armature.getAnimation().getKeyframeStart();
+	Keyframe nextKey = armature.getAnimation().getKeyframeEnd();
+	int numPrevJoints = prevKey.getJoints()->size();
+	int numNextJoints = nextKey.getJoints()->size();
+	vector<Joint> baseJoints = armature.getBaseJoints();
 	vector<Joint> startJoints;
 	vector<Joint> endJoints;
-	int numJoints = baseJointsPtr->size();
-	Keyframe *prevKey = armature->getAnimation()->getKeyframeStart();
-	Keyframe *nextKey = armature->getAnimation()->getKeyframeEnd();
-
-	bool *useBone = new bool[numJoints];
-	memset(useBone, false, sizeof(bool) * numJoints);
-	int itStart = 0;
-	int itEnd = 0;
-	for (int i = 0; i < numJoints; i++) {
-		Joint start = prevKey->getJoints()->at(itStart);
-		Joint end = prevKey->getJoints()->at(itEnd);
-		if (i == start.getJointID()) {
-			startJoints.push_back(start);
-			itStart++;
+	int numJoints = baseJoints.size();
+	int bStartFrame = blend.getFrame();
+	int bEndFrame = prevAnimation.getKeyframeEnd().getFrame();
+	int pFrame = prevKey.getFrame();
+	int nFrame = nextKey.getFrame();
+	int prevAnim = armature.getPrevAnimationIndex();
+	int animIndex = armature.getAnimationIndex();
+	int tStart = 0;
+	int tPrev = 0;
+	int tNext = 0;
+	float endFrame = (float)bStartFrame+0.1F / (float)bEndFrame;
+	float frameP = endFrame + (float)pFrame + 0.1F / (float)nFrame;
+	float timeA = prevKey.getFrame();
+	float timeB = nextKey.getFrame();
+	if (prevAnimation.getFrame()+0.1 > bEndFrame && prevAnim != animIndex) {
+		//armature.resetPrevAnimation();
+	}
+	cout << prevAnim << ' ' << animIndex << endl;
+	bool addFrame = false;
+	for (int i = 0; i < baseJoints.size(); i++) {
+		Joint start = *startKey.getJoint(i);
+		if ((tStart < numPrevJoints) && (blend.getJoint(tStart)->getJointID() == i)) {
+			start = *prevKey.getJoint(tStart);
+			tStart++;
+		}
+		startJoints.push_back(start);
+		if ((tNext < numNextJoints)&&(nextKey.getJoint(tNext)->getJointID() == i)){
+			endJoints.push_back(*nextKey.getJoint(tNext));
+			tNext++;
 		}
 		else {
-			startJoints.push_back(baseJoints[i]);
-		}
-		if (i == end.getJointID()) {
-			endJoints.push_back(end);
-			itEnd++;
-		}
-		else {
-			endJoints.push_back(baseJoints[i]);
+			endJoints.push_back(*startKey.getJoint(i));
 		}
 	}
-	float frame = armature->getFrame();
+	
+	if (frame < timeA) {
+		frame = timeA + (frame - (int)frame);
+	}
 	for (int i = 0; i < numJoints; i++) {
 				
 		Joint *jointStart = &startJoints[i];
@@ -77,18 +97,17 @@ GLuint Shader::loadUniformJoits(Armature *armature, vector<glm::mat3x4> &animati
 
 		string jointBase = string("mLocal[") + to_string((long long)i) + string("]");
 		string jointMatrix = string("mGlobal[") + to_string((long long)i) + string("]");
+
 		glm::mat3x4 matAnimate;
+		
+		vec3 startPos = jointStart->getPos();
+		vec3 endPos = jointEnd->getPos();
 
-		float timeA = prevKey->getFrame();
-		float timeB = nextKey->getFrame();
+		vec3 pos = ShaderUtils::transitionToFrame(startPos, endPos, frame, timeA, timeB);
 
-		vec3 startPos = *jointStart->getPos();
-		vec3 endPos = *jointEnd->getPos();
-
-		vec3 pos = ShaderUtils::transitionToFrame(startPos, endPos, frame, 0, nextKey->getFrame());
-
-		vec4 startRot = *jointStart->getRotation();
-		vec4 endRot = *jointEnd->getRotation();
+		vec4 startRot = jointStart->getRotation();
+		vec4 endRot = jointEnd->getRotation();
+		
 		float t = (float)(frame - timeA) / (float)(timeB - timeA);
 		vec4 quat = glm::mix(startRot, endRot, t);
 		quat = glm::normalize(quat);
@@ -97,7 +116,7 @@ GLuint Shader::loadUniformJoits(Armature *armature, vector<glm::mat3x4> &animati
 		matAnimate[1][3] = pos.y;
 		matAnimate[2][3] = pos.z;
 
-		Math::R_ConcatTransforms(baseJoints[i].localMatrix, matAnimate, baseJoints[i].localMatrix);
+		Math::R_ConcatTransforms(baseJoints[i].getBoneMatrix(), matAnimate, baseJoints[i].localMatrix);
 
 		int parent = baseJoints[i].getParentID();
 		if (parent == -1)
@@ -117,7 +136,6 @@ GLuint Shader::loadUniformJoits(Armature *armature, vector<glm::mat3x4> &animati
 		glUniformMatrix3x4fv(id, 1, GL_FALSE, &baseJoints[i].globalMatrix[0][0]);
 
 	}
-	delete[] useBone;
 	return 0;
 }
 void Shader::loadLight(Light light)

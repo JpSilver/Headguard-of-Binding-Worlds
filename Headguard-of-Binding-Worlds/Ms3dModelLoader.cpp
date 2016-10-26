@@ -522,15 +522,17 @@ Armature ms3dModelLoader::loadMS3dAnimation(string filename)
 		
 		if (baseParIndex == -1) {
 			globalMat = baseData;
-			boneMat = createBoneMatrix(baseJKRot, baseJKPos);
-			Math::AngleQuaternion(baseJKRot, boneRot);
 		}
 		else {
-			boneMat = createBoneMatrix(baseJKRot, baseJKPos);
-			Math::AngleQuaternion(baseJKRot, boneRot);
+			Joint *parJoint = &baseJoints[baseParIndex];
+			R_ConcatTransforms(parJoint->globalMatrix, baseData, globalMat);
 		}
-
-		baseJoints.push_back(Joint(boneMat, baseJKPos, boneRot, i, baseParIndex, baseJName));
+		Math::AngleQuaternion(baseJRot, boneRot);
+		Joint j = Joint(baseData, baseJKPos, boneRot, i, baseParIndex, baseJName);
+		j.localMatrix = baseData;
+		j.globalMatrix = globalMat;
+		j.pGlobal = globalMat;
+		baseJoints.push_back(j);
 	}
 
 	//Read number of animations
@@ -543,8 +545,9 @@ Armature ms3dModelLoader::loadMS3dAnimation(string filename)
 		animName = string(nameBuff);
 		keys.clear();
 		numKeys = readWord(file);
+		int frameTmp = 0;
 		for (int k = 0; k < numKeys; k++) {
-			frame = readWord(file);
+			frame = readWord(file) - (prevEnd+1);
 			numJoints = readWord(file);
 			keyJoints.clear();
 			for (int a = 0; a < numJoints; a++) {
@@ -553,23 +556,30 @@ Armature ms3dModelLoader::loadMS3dAnimation(string filename)
 				kJointPos = readVec3(file);
 				kJointRot = readVec3(file);
 				Joint baseJoint = baseJoints[getJointByName(kJointName, baseJoints)];
+				int index = getJointByName(kJointName, baseJoints);
 				kJointparIndex = getJointByName(kJointParName, baseJoints);
-				kJointBaseMat = *baseJoint.getBoneMatrix();
+				kJointBaseMat = baseJoint.getBoneMatrix();
 				kJointBoneMat = createBoneMatrix(kJointRot, kJointPos);
 				Math::AngleQuaternion(kJointRot, kJointBoneRot);
-				
-				if (kJointparIndex != -1) {
-					kJointGlobalMat = mat3x4();
+				glm::mat3x4 globalMat = glm::int3x4();
+				if (baseParIndex == -1) {
+					globalMat = kJointBaseMat;
 				}
 				else {
-					kJointGlobalMat = kJointBaseMat;
+					Joint *parJoint = &baseJoints[baseParIndex];
+					R_ConcatTransforms(parJoint->globalMatrix, kJointBaseMat, globalMat);
 				}
-				keyJoints.push_back(Joint(kJointBaseMat, kJointPos, kJointBoneRot, baseJoint.getJointID(), kJointparIndex, kJointName));
+				Joint j = Joint(kJointBaseMat, baseJKPos, kJointBoneRot, index, baseParIndex, kJointName);
+				j.localMatrix = kJointBaseMat;
+				j.globalMatrix = kJointGlobalMat;
+				j.pGlobal = kJointGlobalMat;
+				keyJoints.push_back(j);
 			}
 			Keyframe keyframe = Keyframe(keyJoints, frame);
 			keys.push_back(keyframe);
 		}
 		animations.push_back(Animation(keys, animName, endFrame));
+		prevEnd = endFrame + prevEnd;
 	}
 	return Armature(fps, numAnimations, animations, baseJoints, armName);
 };

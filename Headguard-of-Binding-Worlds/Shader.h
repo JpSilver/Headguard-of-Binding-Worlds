@@ -31,7 +31,7 @@ public:
 	};
 	GLuint loadUniformMat4(mat4, string, int);
 	GLuint loadUniformVec3Vector(vector<vec3>, string);
-	GLuint loadUniformJoits(Armature*, vector<glm::mat3x4> &);
+	GLuint loadUniformJoits(Armature&, vector<glm::mat3x4> &, double);
 	void loadLight(Light light);
 	void bindTexture(Texture*, GLuint);
 

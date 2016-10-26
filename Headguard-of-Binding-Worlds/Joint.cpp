@@ -19,6 +19,7 @@ Joint::Joint(mat3x4 matrix, vec3 pos, vec4 rot,int jointIndex, int parentIndex, 
 	this->rot = rot;
 	this->name = name;
 	this->m_ID = jointIndex;
+	this->parentIndex = parentIndex;
 }
 int Joint::getJointID()
 {
@@ -33,19 +34,26 @@ string Joint::getName()
 {
 	return this->name;
 }
-;
-
-mat3x4 * Joint::getBoneMatrix()
+void Joint::setPosition(vec3 position)
 {
-	return &this->boneMatrix;
+	this->pos = position;
+}
+void Joint::setRotation(vec4 rotation)
+{
+	this->rot = rotation;
 };
 
-vec3 * Joint::getPos()
+mat3x4 &Joint::getBoneMatrix()
 {
-	return &this->pos;
+	return this->boneMatrix;
 };
 
-vec4 * Joint::getRotation()
+vec3 &Joint::getPos()
 {
-	return &this->rot;
+	return this->pos;
+};
+
+vec4 &Joint::getRotation()
+{
+	return this->rot;
 };

@@ -20,9 +20,11 @@ public:
 	int getJointID();
 	int getParentID();
 	string getName();
-	mat3x4 *getBoneMatrix();
-	vec3 *getPos();
-	vec4 *getRotation();
+	void setPosition(vec3);
+	void setRotation(vec4);
+	mat3x4 &getBoneMatrix();
+	vec3 &getPos();
+	vec4 &getRotation();
 	mat3x4 localMatrix;
 	mat3x4 globalMatrix;
 	mat3x4 pGlobal;

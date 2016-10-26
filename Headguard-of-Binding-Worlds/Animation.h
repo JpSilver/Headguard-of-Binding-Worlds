@@ -3,6 +3,7 @@
 #include <string>
 #include <map>
 #include "Keyframe.h"
+#include <iostream>
 
 using std::string;
 using std::map;
@@ -15,10 +16,12 @@ public:
 	Animation();
 	Animation(vector<Keyframe>, string , int);
 	void addKeyframe(Keyframe key);
-	Keyframe *getKeyframe(int);
-	Keyframe *getKeyframeStart();
-	Keyframe *getKeyframeEnd();
+	Keyframe &getKeyframe(int);
+	Keyframe &getKeyframeStart();
+	Keyframe &getNextKeyframe(int frame);
+	Keyframe &getKeyframeEnd();
 	float getFrame();
+	void resetFrame();
 	void addFrame(float fps, double deltaTime);
 	void addFrame(float frame);
 	void removeFrame(float fps, double deltaTime);
